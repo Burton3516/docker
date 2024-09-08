@@ -1,0 +1,13 @@
+services:
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - /docker/appdata/tautulli:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Canada/Atlantic
+    ports:
+      - 8181:8181
