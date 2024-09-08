@@ -3,7 +3,6 @@ services:
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
-#    network_mode: host
     runtime: nvidia
     environment:
       - PUID=1000
@@ -15,8 +14,8 @@ services:
 #      - PLEX_CLAIM=
     volumes:
       - /docker/appdata/plex/library:/config
-      - /mnt:/tv
-      - /mnt:/movies
+      - /data/media/tv:/tv
+      - /data/media/movies:/movies
     restart: unless-stopped
     networks:
       plexmacvlan:
