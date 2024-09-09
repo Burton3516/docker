@@ -3,19 +3,21 @@ services:
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
-    runtime: nvidia
+#   runtime: nvidia
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Canada/Atlantic
       - VERSION=latest
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-#      - PLEX_CLAIM=
+#     - NVIDIA_VISIBLE_DEVICES=all
+#     - NVIDIA_DRIVER_CAPABILITIES=all
+#     - PLEX_CLAIM=
     volumes:
       - /docker/appdata/plex/library:/config
       - /data/media/tv:/tv
       - /data/media/movies:/movies
+#  device:
+#     /dev/dri:/dev/dri     # intel/amd hardware acceleration
     restart: unless-stopped
     networks:
       plexmacvlan:
@@ -29,5 +31,5 @@ networks:
     ipam:
       config:
         - subnet: "10.69.69.0/24"
-          ip_range: "10.69.69.128/25"
+          ip_range: "10.69.69.254/32"
           gateway: "10.69.69.1"
