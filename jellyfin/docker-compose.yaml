@@ -12,8 +12,8 @@ services:
       - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - /docker/appdata/jellyfin/library:/config
-      - /mnt:/data/tvshows
-      - /mnt:/data/movies
+      - /data/media/tv:/data/tvshows
+      - /data/media:/data/movies
     ports:
       - 8096:8096
       - 8920:8920
