@@ -1,0 +1,24 @@
+---
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Canada/Atlantic
+      - WEBUI_PORTS=8080/tcp,8080/udp
+    volumes:
+      - /docker/appdata/qbittorrent:/config
+      - /data/torrents:/data/torrents
+    networks:
+      server-macvlan:
+        ipv4_address: 10.69.69.30
+networks:
+  server-macvlan:
+    external: true
+    name: server-macvlan
