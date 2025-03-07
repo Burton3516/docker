@@ -4,8 +4,8 @@ services:
     image: lscr.io/linuxserver/unifi-network-application:latest
     container_name: unifi-network-application
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=5000
+      - PGID=5000
       - TZ=Canada/Atlantic
       - MONGO_USER=unifi
       - MONGO_PASS=
