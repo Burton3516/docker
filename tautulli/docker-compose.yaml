@@ -6,8 +6,8 @@ services:
     volumes:
       - /docker/appdata/tautulli:/config
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3002
+      - PGID=3000
       - TZ=Canada/Atlantic
     ports:
       - 8181:8181
