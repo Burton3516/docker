@@ -5,14 +5,10 @@ Folder structure for Servarr
 
 data
 ├── torrents
-│   ├── books
 │   ├── movies
-│   ├── music
 │   └── tv
 └── media
-    ├── books
     ├── movies
-    ├── music
     └── tv
 
 ----------------
