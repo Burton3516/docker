@@ -11,6 +11,8 @@ services:
         max-file: "10"
         max-size: "2m"
     environment:
+      - PUID=3003
+      - PGID=3003
       - STASH_STASH=/data/
       - STASH_GENERATED=/generated/
       - STASH_METADATA=/metadata/
