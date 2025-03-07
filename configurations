@@ -1,3 +1,29 @@
+A compilation of my personal docker configurations.
+----------------------------------------------------
+
+Folder structure for Servarr
+
+data
+├── torrents
+│   ├── books
+│   ├── movies
+│   ├── music
+│   └── tv
+├── usenet
+│   ├── incomplete
+│   └── complete
+│       ├── books
+│       ├── movies
+│       ├── music
+│       └── tv
+└── media
+    ├── books
+    ├── movies
+    ├── music
+    └── tv
+
+----------------
+
 docker networks
 ----------------
 docker network create -d macvlan   --subnet=10.69.69.0/24   --gateway=10.69.69.1   -o parent=enp2s0f0   server-macvlan
