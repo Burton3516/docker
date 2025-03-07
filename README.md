@@ -22,5 +22,40 @@ data
     ├── music
     └── tv
 
-----------------------------------------------------
+----------------
 
+docker networks
+----------------
+docker network create -d macvlan   --subnet=10.69.69.0/24   --gateway=10.69.69.1   -o parent=enp2s0f0   server-macvlan
+
+docker network create -d macvlan   --subnet=10.13.37.0/24   --gateway=10.13.37.1   -o parent=enp2s0f0.1   unifi-macvlan
+
+
+-------------------------------------------------------------------------------------------------------------------------
+/etc/network/interfaces
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug enp8s0
+iface enp8s0 inet dhcp
+
+# Intel X520-DA2 SFP+ NIC
+allow-hotplug enp2s0f0
+iface enp2s0f0 inet dhcp
+up ip link set enp2s0f0 promisc on
+up ip link add macvlan-bridge link enp2s0f0 type macvlan mode bridge
+up ip addr add 10.69.69.2/32 dev macvlan-bridge
+up ip link set macvlan-bridge up
+up ip route add 10.69.69.20/32 dev macvlan-bridge
+up ip route add 10.69.69.30/32 dev macvlan-bridge
+
+#allow-hotplug enp2s0f1
+#iface enp2s0f1 inet dhcp
