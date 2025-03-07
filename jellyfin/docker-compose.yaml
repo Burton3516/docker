@@ -5,8 +5,8 @@ services:
     container_name: jellyfin
     runtime: nvidia
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3001
+      - PGID=3001
       - TZ=Canada/Atlantic
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
