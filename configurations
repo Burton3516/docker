@@ -11,14 +11,28 @@ data
     ├── movies
     └── tv
 
-----------------
+----------------------------
+User:Group uid:gid + groups
 
-docker networks
+qbittorrent:servarr 2000:2000
+radarr:servarr 2001:2000
+sonarr:servarr 2002:2000
+bazarr:servarr 2003:2000
+prowlarr:servarr 2004:2000
+overseerr:servarr 2005:2000
+homarr:servarr 2006:2000
+flaresolverr:servarr 2007:2000
+
+plex:plex 3000:3000 + servarr 2000
+jellyfin:jellyfin 3001:3001 + servarr 2000
+tautulli:plex 3002:3000
+
 ----------------
+docker networks
+
 docker network create -d macvlan   --subnet=10.69.69.0/24   --gateway=10.69.69.1   -o parent=enp2s0f0   server-macvlan
 
 docker network create -d macvlan   --subnet=10.13.37.0/24   --gateway=10.13.37.1   -o parent=enp2s0f0.1   unifi-macvlan
-
 
 -------------------------------------------------------------------------------------------------------------------------
 /etc/network/interfaces
