@@ -27,8 +27,6 @@ plex:plex 3000:3000 + servarr 2000
 jellyfin:jellyfin 3001:3001 + servarr 2000
 tautulli:plex 3002:3000
 
-immich:immich 5001:5001
-
 ----------------
 docker networks
 
