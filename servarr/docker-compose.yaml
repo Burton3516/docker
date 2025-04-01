@@ -79,16 +79,15 @@ services:
       - /docker/appdata/overseerr/config:/config
   homarr:
     container_name: homarr
-    image: ghcr.io/ajnart/homarr:latest
+    image: ghcr.io/homarr-labs/homarr:latest
     restart: unless-stopped
     environment:
+      - SECRET_ENCRYPTION_KEY=(GO to https://homarr.dev/docs/getting-started/installation/docker)
       - PUID=2006
       - PGID=2000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /docker/appdata/homarr/configs:/app/data/configs
-      - /docker/appdata/homarr/icons:/app/public/icons
-      - /docker/appdata/homarr/data:/data
+      - /docker/appdata/homarr:/appdata
     ports:
       - 7575:7575
   flaresolverr:
