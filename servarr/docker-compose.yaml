@@ -113,7 +113,6 @@ services:
   byparr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: byparr
-    user: 2007:2000
     restart: unless-stopped
     init: true
     build:
