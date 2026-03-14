@@ -64,19 +64,39 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /docker/appdata/prowlarr:/config
-  overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
-    restart: unless-stopped
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
+    user: 2005:2000
     environment:
-      - PUID=2005
-      - PGID=2000
+      - LOG_LEVEL=debug
       - TZ=Canada/Atlantic
-      - PORT=5055
+      - PORT=5055 #optional
     ports:
       - 5055:5055
     volumes:
-      - /docker/appdata/overseerr/config:/config
+      - /docker/appdata/seerr/config:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    restart: unless-stopped
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    restart: unless-stopped
+    environment:
+      - SECRET_ENCRYPTION_KEY=b2c6b47fcd2ee62a6089cf6b9ece85805a87d801a74b5c9d459e026edfdbf156
+      - PUID=2006
+      - PGID=2000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /docker/appdata/homarr:/appdata
+    ports:
+      - 7575:7575
   homarr:
     container_name: homarr
     image: ghcr.io/homarr-labs/homarr:latest
@@ -90,16 +110,14 @@ services:
       - /docker/appdata/homarr:/appdata
     ports:
       - 7575:7575
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    environment:
-      - PUID=2007
-      - PGID=2000
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-      - LOG_HTML=${LOG_HTML:-false}
-      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=Canada/Atlantic
-    ports:
-      - 8191:8191
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    user: 2007:2000
     restart: unless-stopped
+    init: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8191:8191"
