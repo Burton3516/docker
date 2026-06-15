@@ -22,6 +22,7 @@ prowlarr:servarr 2004:2000
 seerr:servarr 2005:2000
 homarr:servarr 2006:2000
 byparr:servarr 2007:2000
+sabnzbd:servarr 2008:2000
 soulseek:servarr 2009:2000
 
 plex:plex 3000:3000 + servarr 2000
