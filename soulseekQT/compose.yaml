@@ -1,0 +1,18 @@
+services:
+  soulseek:
+    image: realies/soulseek
+    container_name: soulseek
+    restart: unless-stopped
+    ports:
+      - 6080:6080
+      - 54416:54416  # listening port
+      - 54417:54417  # obfuscated port
+    environment:
+      - PUID:2009
+      - PGID:2000
+      - UMASK:777
+      - TZ:Canada/Atlantic
+    volumes:
+      - /docker/appdata/soulseek:/data/.SoulseekQt
+      - /data/downloads:/data/Soulseek Downloads
+      - /data/media/music:/data/Soulseek Shared Folder
