@@ -110,6 +110,20 @@ services:
       - /docker/appdata/homarr:/appdata
     ports:
       - 7575:7575
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=2008
+      - PGID=2000
+      - TZ=Canada/Atlantic
+    volumes:
+      - /docker/appdata/sabnzbd/config:/config
+      - /data/usenet/incomplete:/incomplete-downloads #optional
+      - /data/usenet/complete:/downloads #optional
+    ports:
+      - 8080:8080
+    restart: unless-stopped
   byparr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: byparr
