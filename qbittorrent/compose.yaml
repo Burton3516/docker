@@ -4,6 +4,8 @@ services:
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent
     restart: unless-stopped
+    ports:
+      - 8080:8080
     environment:
       - PUID=2000
       - PGID=2000
@@ -15,8 +17,13 @@ services:
       - /data/torrents:/data/torrents
     networks:
       server-macvlan:
+        mac_address: fe:fc:79:96:e1:03
         ipv4_address: 10.69.69.30
+      isolated:
 networks:
   server-macvlan:
     external: true
     name: server-macvlan
+  isolated:
+    external: true
+    name: isolated-servarr
