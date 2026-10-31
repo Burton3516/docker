@@ -1,53 +1,149 @@
 ---
 services:
-  plex:
-    image: lscr.io/linuxserver/plex:latest
-    container_name: plex
-#    network_mode: host
-    runtime: nvidia
-    environment:
-      - PUID=3000
-      - PGID=3000
-      - TZ=Canada/Atlantic
-      - VERSION=latest
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/nvidia/current
-#      - PLEX_CLAIM=
-    volumes:
-      - /docker/appdata/plex/library:/config
-      - /data/media:/tv
-      - /data/media:/movies
-    restart: unless-stopped
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
     networks:
-      server-macvlan:
-        mac_address: 32:1d:9c:e5:93:1f
-        ipv4_address: 10.69.69.20
-      isolated:
-
-  tautulli:
-    image: ghcr.io/tautulli/tautulli
-    container_name: tautulli
-    networks:
-      - tautulli
+      - default
       - isolated
     restart: unless-stopped
-    volumes:
-      - /docker/appdata/tautulli:/config
-    environment:
-      - PUID=3002
-      - PGID=3000
-      - TZ=Canada/Atlantic
+    logging:
+      driver: json-file
     ports:
-      - 8181:8181
-
+      - 7878:7878
+    environment:
+      - PUID=2001
+      - PGID=2000
+      - UMASK=002
+      - TZ=Canada/Atlantic
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/appdata/radarr:/config
+      - /data:/data
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:latest
+    networks:
+      - default
+      - isolated
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=2002
+      - PGID=2000
+      - UMASK=002
+      - TZ=Canada/Atlantic
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/appdata/sonarr:/config
+      - /data:/data
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr:latest
+    networks:
+      - default
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:
+      - 6767:6767
+    environment:
+      - PUID=2003
+      - PGID=2000
+      - UMASK=002
+      - TZ=Canada/Atlantic
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/appdata/bazarr:/config
+      - /data/media:/data/media
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    networks:
+      - default
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=2004
+      - PGID=2000
+      - TZ=Canada/Atlantic
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/appdata/prowlarr:/config
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
+    networks:
+      - default
+      - isolated
+    user: 2005:2000
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Canada/Atlantic
+      - PORT=5055 #optional
+    ports:
+      - 5055:5055
+    volumes:
+      - /docker/appdata/seerr/config:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    restart: unless-stopped
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    networks:
+      - default
+      - isolated
+    restart: unless-stopped
+    environment:
+      - SECRET_ENCRYPTION_KEY=b2c6b47fcd2ee62a6089cf6b9ece85805a87d801a74b5c9d459e026edfdbf156
+      - PUID=2006
+      - PGID=2000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /docker/appdata/homarr:/appdata
+    ports:
+      - 7575:7575
+#  sabnzbd:
+#    image: lscr.io/linuxserver/sabnzbd:latest
+#    container_name: sabnzbd
+#    environment:
+#      - PUID=2008
+#      - PGID=2000
+#      - TZ=Canada/Atlantic
+#    volumes:
+#      - /docker/appdata/sabnzbd/config:/config
+#      - /data/usenet/incomplete:/incomplete-downloads #optional
+#      - /data/usenet/complete:/downloads #optional
+#    ports:
+#      - 8080:8080
+#    restart: unless-stopped
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    networks:
+      - default
+    restart: unless-stopped
+    init: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8191:8191"
 networks:
-  server-macvlan:
-    external: true
-    name: server-macvlan
-  isolated:
-    external: true
-    name: isolated-servarr
-  tautulli:
-    name: default-tautulli
+  default:
+    name: default-servarr
     driver: bridge
+  isolated:
+    name: isolated-servarr
+    driver: bridge
+    internal: true
