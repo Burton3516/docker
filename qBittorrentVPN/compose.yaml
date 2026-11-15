@@ -1,0 +1,40 @@
+services:
+    arch-qbittorrentvpn:
+        image: binhex/arch-qbittorrentvpn
+        restart: unless-stopped
+        environment:
+            - PGID=2000
+            - PUID=2000
+            - UMASK=002
+            - WEBUI_PORT=8080
+            - DEBUG=false
+#           - VPN_OUTPUT_PORTS=5678
+#           - VPN_INPUT_PORTS=1234
+            - NAME_SERVERS=1.1.1.1,1.0.0.1
+            - LAN_NETWORK=10.69.69.0/24
+            - SOCKS_PASS=<SocksPassword>
+            - SOCKS_USER=<SocksUsername>
+            - ENABLE_SOCKS=yes
+            - USERSPACE_WIREGUARD=no
+            - STRICT_PORT_FORWARD=yes
+            - ENABLE_PRIVOXY=yes
+            - ENABLE_STARTUP_SCRIPTS=no
+            - VPN_CLIENT=openvpn
+            - VPN_PROV=pia
+            - VPN_PASS=<PIAPassWord>
+            - VPN_USER=<PIAUserName>
+            - VPN_ENABLED=yes
+            - STRICT_PORT_FORWARD=yes
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /docker/appdata/qbittorrentvpn/config:/config
+            - /data/torrents:/data/torrents
+        container_name: qbittorrentvpn
+        ports:
+            - '58946:58946/udp'
+            - '58946:58946'
+            - '9118:9118'
+            - '8118:8118'
+            - '8080:8080'
+        cap_add:
+            - NET_ADMIN
