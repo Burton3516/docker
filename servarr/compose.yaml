@@ -3,9 +3,6 @@ services:
   radarr:
     container_name: radarr
     image: ghcr.io/hotio/radarr:latest
-    networks:
-      - default
-      - isolated
     restart: unless-stopped
     logging:
       driver: json-file
@@ -23,9 +20,6 @@ services:
   sonarr:
     container_name: sonarr
     image: ghcr.io/hotio/sonarr:latest
-    networks:
-      - default
-      - isolated
     restart: unless-stopped
     logging:
       driver: json-file
@@ -43,8 +37,6 @@ services:
   bazarr:
     container_name: bazarr
     image: ghcr.io/hotio/bazarr:latest
-    networks:
-      - default
     restart: unless-stopped
     logging:
       driver: json-file
@@ -62,8 +54,6 @@ services:
   prowlarr:
     container_name: prowlarr
     image: ghcr.io/hotio/prowlarr
-    networks:
-      - default
     restart: unless-stopped
     ports:
       - 9696:9696
@@ -78,9 +68,6 @@ services:
     image: ghcr.io/seerr-team/seerr:latest
     init: true
     container_name: seerr
-    networks:
-      - default
-      - isolated
     user: 2005:2000
     environment:
       - LOG_LEVEL=debug
@@ -100,9 +87,6 @@ services:
   homarr:
     container_name: homarr
     image: ghcr.io/homarr-labs/homarr:latest
-    networks:
-      - default
-      - isolated
     restart: unless-stopped
     environment:
       - SECRET_ENCRYPTION_KEY=b2c6b47fcd2ee62a6089cf6b9ece85805a87d801a74b5c9d459e026edfdbf156
@@ -130,8 +114,6 @@ services:
   byparr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: byparr
-    networks:
-      - default
     restart: unless-stopped
     init: true
     build:
@@ -139,11 +121,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8191:8191"
-networks:
-  default:
-    name: default-servarr
-    driver: bridge
-  isolated:
-    name: isolated-servarr
-    driver: bridge
-    internal: true
